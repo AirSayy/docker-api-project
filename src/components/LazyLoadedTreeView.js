@@ -30,6 +30,7 @@ const LazyLoadedTreeView = ({item}) => {
             {item.children.map((child) => renderTreeItem(child))}
           </ul>
         )}
+        <Link to={`/updateItem/${item.id}`}>Update</Link>
       </li>
     );
   };
