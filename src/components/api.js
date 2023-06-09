@@ -26,7 +26,11 @@ export const getItems = (params) => {
 };
 
 export const updateItem = (itemId, data) => {
-  return axios.put(`/items/${itemId}`, data);
+  return axios.put(`/items/${itemId}`, data,{
+    headers: {
+        'Content-Type': 'application/json',
+      },
+  });
 };
 
 export const deleteItem = (itemId) => {

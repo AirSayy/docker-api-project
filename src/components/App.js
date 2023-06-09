@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes , Link} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes , Link } from 'react-router-dom';
 import PaginatedTable from './PaginatedTable';
 import LazyLoadedTreeView from './LazyLoadedTreeView';
+import ItemUpdateForm from './ItemUpdateForm';
 import AddItem from './AddItem'
 
 
@@ -22,8 +23,10 @@ function App() {
       </button>
            
       <Routes>
+      
         
         <Route path="/addItem" element={<AddItem />} />
+        <Route path="/UpdateItem/:itemId" element={<ItemUpdateForm />} />
         <Route path="/tableView" element={<PaginatedTable />} />
         <Route path="/treeView" element={<LazyLoadedTreeView />} />
 

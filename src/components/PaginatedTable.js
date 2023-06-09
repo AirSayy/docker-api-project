@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate , Link} from 'react-router-dom';
 import { getItems} from './api';
 
-const PaginatedTable = () => {
+
+const PaginatedTable = ({items}) => {
   
   const [tableData, setTableData] = useState([]);
   const location = useLocation();
@@ -27,6 +28,9 @@ const PaginatedTable = () => {
   
     loadTableData();
   }, [location, navigate]);
+
+  
+
 
 
   
@@ -53,6 +57,7 @@ const PaginatedTable = () => {
                 <td className="px-6 py-4">{item.name}</td>
                 <td className="px-6 py-4">{item.description}</td>
                 <td className="px-6 py-4">{item.parent}</td>
+                <td><Link to={`/updateItem/${item.id}`}>Update</Link></td>
               </tr>
             ))
           ) : (
@@ -62,7 +67,7 @@ const PaginatedTable = () => {
           )}
         </tbody>
       </table>
-
+      
       <Link to='/addItem'>
       <button className=" ml-10 mt-10 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Add item</button>
       </Link>
