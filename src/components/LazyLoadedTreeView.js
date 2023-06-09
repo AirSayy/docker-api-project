@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { getItems } from './api';
 
-const LazyLoadedTreeView = () => {
+const LazyLoadedTreeView = ({item}) => {
   const [treeData, setTreeData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTreeData = async () => {
       try {
-        const response = await axios.get('/items');
+        const response = await getItems();
         setTreeData(response.data.results);
         setIsLoading(false);
         console.log(response.data.results)
@@ -24,7 +25,7 @@ const LazyLoadedTreeView = () => {
     return (
       <li key={item.id}>
         {item.name}
-        {item.numberOfChildren > 0 && (
+        {item.numberOfChildren > 0 && item.children &&  (
           <ul>
             {item.children.map((child) => renderTreeItem(child))}
           </ul>
@@ -41,6 +42,7 @@ const LazyLoadedTreeView = () => {
       ) : (
         <ul>
           {treeData.map((item) => renderTreeItem(item))}
+          
         </ul>
       )}
     </div>

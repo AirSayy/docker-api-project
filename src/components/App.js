@@ -26,7 +26,7 @@ function App() {
       
         
         <Route path="/addItem" element={<AddItem />} />
-        <Route path="/UpdateItem/:itemId" element={<ItemUpdateForm />} />
+        <Route path="/updateItem/:itemId" element={<ItemUpdateForm />} />
         <Route path="/tableView" element={<PaginatedTable />} />
         <Route path="/treeView" element={<LazyLoadedTreeView />} />
 

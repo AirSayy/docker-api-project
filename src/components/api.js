@@ -17,7 +17,7 @@ export const createItem =  (data) => {
   
 
 export const getItems = (params) => {
-    console.log( {params} )
+   
   return axios.get('/items', { params } ,{
     headers: {
         'Content-Type': 'application/json',

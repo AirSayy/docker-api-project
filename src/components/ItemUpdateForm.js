@@ -17,13 +17,20 @@ const ItemUpdateForm = () => {
 
   const fetchItemData = async () => {
     try {
-      const response = await getItems(itemId);
-      setItemData(response.data);
+      const response = await getItems(); // Pass the id as a query parameter
+      const item = response.data.results; // Assuming the response contains the item data
+  
+      // Update the state with the fetched item data
+      setItemData({
+        name: item.name,
+        description: item.description,
+        parentId: item.parentId,
+      });
     } catch (error) {
       console.error('Error fetching item data:', error);
     }
   };
-
+  
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setItemData((prevData) => ({
