@@ -1,7 +1,8 @@
 // src/TableView.js
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate , Link} from 'react-router-dom';
-import { getItems} from './api';
+import { getItems , deleteItem } from './api';
+
 
 
 const PaginatedTable = ({items}) => {
@@ -28,6 +29,19 @@ const PaginatedTable = ({items}) => {
   
     loadTableData();
   }, [location, navigate]);
+
+  
+    
+  
+  const handleDelete = async (itemId) => {
+    try {
+      await deleteItem(itemId);
+      // Remove the deleted item from the items array
+      setTableData((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
 
   
 
@@ -58,6 +72,10 @@ const PaginatedTable = ({items}) => {
                 <td className="px-6 py-4">{item.description}</td>
                 <td className="px-6 py-4">{item.parent}</td>
                 <td><Link to={`/updateItem/${item.id}`}>Update</Link></td>
+                <button onClick={() => handleDelete(item.id)}>Delete</button>
+      
+    
+              
               </tr>
             ))
           ) : (
