@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { updateItem, getItems } from './api';
+import {  updateItem, getItems } from './api';
 
 const ItemUpdateForm = () => {
   const { itemId } = useParams();
@@ -10,16 +10,18 @@ const ItemUpdateForm = () => {
     description: '',
     parentId: '',
   });
+  const [validParents, setValidParents] = useState([]);
 
   useEffect(() => {
     fetchItemData();
+    fetchValidParents();
   }, []);
 
   const fetchItemData = async () => {
     try {
-      const response = await getItems(); // Pass the id as a query parameter
-      const item = response.data.results; // Assuming the response contains the item data
-  
+      const response = await getItems(itemId);
+      const item = response.data; // Assuming the response contains the item data
+
       // Update the state with the fetched item data
       setItemData({
         name: item.name,
@@ -30,7 +32,24 @@ const ItemUpdateForm = () => {
       console.error('Error fetching item data:', error);
     }
   };
-  
+
+  const fetchValidParents = async () => {
+    try {
+      const response = await getItems();
+      const items = response.data.results; // Assuming the response contains the list of items
+
+      // Exclude the current item and its descendants from the valid parents list
+      const filteredItems = items.filter(
+        (item) => item.id !== itemId && !item.ancestors.includes(itemId)
+      );
+
+      // Update the state with the filtered valid parents list
+      setValidParents(filteredItems);
+    } catch (error) {
+      console.error('Error fetching valid parents:', error);
+    }
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setItemData((prevData) => ({
@@ -49,19 +68,63 @@ const ItemUpdateForm = () => {
   };
 
   return (
-    <div>
-      <h2>Update Item</h2>
+    <div className="max-w-md mx-auto mt-8">
+      <h2 className="text-xl font-bold mb-4">Update Item</h2>
       <form>
-        <label htmlFor="name">Name:</label>
-        <input type="text" id="name" name="name" value={itemData.name} onChange={handleInputChange} />
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            Name:
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={itemData.name}
+            onChange={handleInputChange}
+            className="mt-1 p-2.5 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
 
-        <label htmlFor="description">Description:</label>
-        <textarea id="description" name="description" value={itemData.description} onChange={handleInputChange} />
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+            Description:
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={itemData.description}
+            onChange={handleInputChange}
+            className="mt-1 p-2.5 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
 
-        <label htmlFor="parentId">Parent ID:</label>
-        <input type="text" id="parentId" name="parentId" value={itemData.parentId} onChange={handleInputChange} />
+        <div className="mb-4">
+          <label htmlFor="parentId" className="block text-sm font-medium text-gray-700">
+            Parent:
+          </label>
+          <select
+            id="parentId"
+            name="parentId"
+            value={itemData.parentId}
+            onChange={handleInputChange}
+            className="mt-1 p-2.5 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="">None</option>
+            {validParents.map((parent) => (
+              <option key={parent.id} value={parent.id}>
+                {parent.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <button type="button" onClick={handleUpdate}>Update</button>
+        <button
+          type="button"
+          onClick={handleUpdate}
+          className="w-full px-4 py-2 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          Update
+        </button>
       </form>
     </div>
   );
