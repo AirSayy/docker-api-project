@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getItems } from './api';
+import { getItems , deleteItem  } from './api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
+
 
 const LazyLoadedTreeView = ({item}) => {
   const [treeData, setTreeData] = useState([]);
@@ -30,9 +34,22 @@ const LazyLoadedTreeView = ({item}) => {
             {item.children.map((child) => renderTreeItem(child))}
           </ul>
         )}
-        <Link to={`/updateItem/${item.id}`}>Update</Link>
+        <Link to={`/updateItem/${item.id}`}><FontAwesomeIcon icon={faEdit} /></Link>
+         <button  onClick={() => handleDelete(item.id)}><FontAwesomeIcon icon={faTrash} /> </button> 
+        
+         
       </li>
     );
+  };
+
+  const handleDelete = async (itemId) => {
+    try {
+      await deleteItem(itemId);
+      // Remove the deleted item from the items array
+      setTreeData((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
   };
 
   return (
