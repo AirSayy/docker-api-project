@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getItem } from './api';
 import AddItem from './AddItem';
 
 const ParentComponent = () => {
@@ -18,7 +17,7 @@ const ParentComponent = () => {
 
   return (
     <div>
-      {/* Render the AddItem component and pass the selectedItemId as a prop */}
+      
       <AddItem selectedItemId={selectedItemId} />
     </div>
   );

@@ -15,12 +15,12 @@ const ItemUpdateForm = () => {
   useEffect(() => {
     fetchItemData();
     fetchValidParents();
-  }, []);
+  });
 
   const fetchItemData = async () => {
     try {
       const response = await getItems(itemId);
-      const item = response.data; // Assuming the response contains the item data
+      const item = response.data; 
 
       // Update the state with the fetched item data
       setItemData({
@@ -36,7 +36,7 @@ const ItemUpdateForm = () => {
   const fetchValidParents = async () => {
     try {
       const response = await getItems();
-      const items = response.data.results; // Assuming the response contains the list of items
+      const items = response.data.results; 
 
       // Exclude the current item and its descendants from the valid parents list
       const filteredItems = items.filter(

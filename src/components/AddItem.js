@@ -13,7 +13,7 @@ const AddItem = ({ selectedItemId }) => {
 
   useEffect(() => {
     fetchValidItems();
-  }, []);
+  });
 
   const fetchValidItems = async () => {
     try {
