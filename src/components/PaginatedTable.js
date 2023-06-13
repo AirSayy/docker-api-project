@@ -9,6 +9,7 @@ const PaginatedTable = () => {
   const [tableData, setTableData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const PaginatedTable = () => {
         // GET /items
         const response = await getItems();
         setTableData(response.data.results);
-        console.log(response.data.results)
+        console.log(response.data.results);
 
         const state = location.state;
         if (state && state.createdItemId) {
@@ -44,15 +45,36 @@ const PaginatedTable = () => {
     }
   };
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1);
+  };
+
+  // Filter table data based on search term
+  const filteredData = tableData.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="relative overflow-x-auto">
+      {/* Search input */}
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium text-gray-700">Search by Name:</label>
+        <input
+          type="text"
+          className="w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+
       {/* Render the table */}
       <table className="w-full text-sm text-left text-black dark:text-gray-900">
         <thead className="text-xs text-gray-900 uppercase bg-gray-50 dark:bg-white dark:text-black">
@@ -101,7 +123,7 @@ const PaginatedTable = () => {
       {/* Pagination */}
       <div className="mt-4">
         <ul className="flex justify-center">
-          {Array.from({ length: Math.ceil(tableData.length / itemsPerPage) }).map((_, index) => (
+          {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }).map((_, index) => (
             <li key={index}>
               <button
                 className={`px-2 py-1 mx-1 rounded-md focus:outline-none ${
