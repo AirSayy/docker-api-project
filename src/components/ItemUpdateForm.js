@@ -22,7 +22,7 @@ const ItemUpdateForm = () => {
       const response = await getItems(itemId);
       const item = response.data; 
 
-      // Update the state with the fetched item data
+      // Update the state with the fetched item data.
       setItemData({
         name: item.name,
         description: item.description,
